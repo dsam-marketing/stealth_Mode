@@ -1,0 +1,90 @@
+service: stealth
+
+# frameworkVersion: "2"
+
+useDotenv: true
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: false #non-linux
+  stage: ${opt:stage, self:provider.stage}
+  memSize:
+    dev: 128
+    alpha: 128
+    prod: 128
+
+provider:
+  name: aws
+  runtime: python3.8
+  logRetentionInDays: 30
+  stage: dev
+  region: us-east-1
+  memorySize: ${self:custom.memSize.${self:custom.stage}}
+  profile: stealth
+  environment:
+    STAGE: ${self:custom.stage}
+
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:*"
+          Resource: "*"
+
+functions:
+  Analyze:
+    handler: handler.analyze
+    package: {}
+    # timeout: 10
+
+# you can add CloudFormation resource templates here
+resources:
+  Resources:
+    SESLambdaPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        Action: lambda:InvokeFunction
+        FunctionName: !Ref AnalyzeLambdaFunction
+        Principal: ses.amazonaws.com
+        SourceAccount: !Ref AWS::AccountId
+    SESRuleSet:
+      Type: AWS::SES::ReceiptRuleSet
+      Properties:
+        RuleSetName: analyze-rule-set
+    SESRule:
+      DependsOn: SESRuleSet
+      Type: AWS::SES::ReceiptRule
+      Properties:
+        RuleSetName: !Ref SESRuleSet
+        Rule:
+          Enabled: true
+          Name: analyze-rule
+          Recipients:
+            # - ${ssm:RECIPIENT}
+            - sam@networkerspace.com
+          Actions:
+            - LambdaAction:
+                FunctionArn: !GetAtt AnalyzeLambdaFunction.Arn
+    MasterTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        KeySchema:
+          - AttributeName: date
+            KeyType: HASH
+          - AttributeName: score
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: date
+            AttributeType: S
+          - AttributeName: score
+            AttributeType: S
+        TableName: Master-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+  Outputs:
+    SESRule:
+      Value:
+        Ref: SESRule

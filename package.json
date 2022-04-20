@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "ses email analysis backend",
+  "main": "index.js",
+  "repository": "https://github.com/dsam-marketing/stealth_Mode.git",
+  "author": "harleyguru",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-python-requirements": "^5.4.0"
+  }
+}
