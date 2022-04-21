@@ -64,8 +64,7 @@ resources:
           Enabled: true
           Name: analyze-rule
           Recipients:
-            # - ${ssm:RECIPIENT}
-            - sam@networkerspace.com
+            - ${ssm:RECIPIENT}
           Actions:
             - LambdaAction:
                 FunctionArn: !GetAtt AnalyzeLambdaFunction.Arn
