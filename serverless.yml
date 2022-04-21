@@ -68,6 +68,7 @@ resources:
           Actions:
             - LambdaAction:
                 FunctionArn: !GetAtt AnalyzeLambdaFunction.Arn
+                InvocationType: Event
     MasterTable:
       Type: "AWS::DynamoDB::Table"
       Properties:

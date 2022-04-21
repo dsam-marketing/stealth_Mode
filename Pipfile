@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 dynamodb-json = "*"
+ibm-watson = "*"
+mail-parser = "*"
 
 [dev-packages]
 
