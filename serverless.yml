@@ -34,16 +34,78 @@ provider:
           Action:
             - "dynamodb:*"
           Resource: "*"
+        - Effect: "Allow"
+          Action:
+            - "s3:*"
+          Resource: "*"
 
 functions:
   Analyze:
     handler: handler.analyze
     package: {}
     # timeout: 10
+    environment:
+      BUCKET:
+        Ref: StealthBucket
+      ATTACHMENT_BUCKET:
+        Ref: StealthAttachmentBucket
 
 # you can add CloudFormation resource templates here
 resources:
   Resources:
+    StealthBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        # BucketName: Stealth
+        # Set the CORS policy
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - "*"
+              AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+    StealthAttachmentBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: "stealth-attachments"
+    PublicBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref StealthAttachmentBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "s3:GetObject"
+              Resource:
+                - !Join ["/", [!GetAtt [StealthAttachmentBucket, Arn], "*"]]
+              Principal: "*"
+    SESBucketPermission:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref StealthBucket
+        PolicyDocument:
+          Statement:
+            - Principal:
+                Service: "ses.amazonaws.com"
+              Action:
+                - s3:PutObject
+              Effect: Allow
+              Sid: "AllowSESPuts"
+              Resource:
+                Fn::Join:
+                  ["", ["arn:aws:s3:::", !Ref StealthBucket, "/*"]]
+              Condition:
+                StringEquals:
+                  "aws:Referer": { Ref: AWS::AccountId }
     SESLambdaPermission:
       Type: AWS::Lambda::Permission
       Properties:
@@ -66,6 +128,8 @@ resources:
           Recipients:
             - ${ssm:RECIPIENT}
           Actions:
+            - S3Action:
+                BucketName: !Ref StealthBucket
             - LambdaAction:
                 FunctionArn: !GetAtt AnalyzeLambdaFunction.Arn
                 InvocationType: Event
@@ -88,3 +152,15 @@ resources:
     SESRule:
       Value:
         Ref: SESRule
+    StealthBucketArn:
+      Value:
+        Fn::GetAtt:
+          - StealthBucket
+          - Arn
+      Export:
+        Name: StealthBucketArn-${self:custom.stage}
+    StealthBucketName:
+      Value:
+        Ref: StealthBucket
+      Export:
+        Name: StealthBucketName-${self:custom.stage}

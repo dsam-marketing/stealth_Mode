@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c555824a8c812314456c455364e01112d1d769356471f994b35b5f39c06fec73"
+            "sha256": "2b2926658e9e11a8441969d6d59fbb85b58368e19828aef2e8a7e8337247268f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,22 +16,6 @@
         ]
     },
     "default": {
-        "boto3": {
-            "hashes": [
-                "sha256:0789842ca7d722723d7e9fae2158aea6f304c14df08929f9c62b6a277705ff39",
-                "sha256:1300661bd4defa42d7e019d515fbfd2984170cf3f5c0bf6bc275fbd9498faf5f"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==1.21.44"
-        },
-        "botocore": {
-            "hashes": [
-                "sha256:0030a11eac972be46859263820885ba650503622c5acfe58966f482d42cc538d",
-                "sha256:ed07772c924984e5b3c1005f7ba4600cebd4169c23307cf6e92cccadf0b5d2e7"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==1.24.44"
-        },
         "certifi": {
             "hashes": [
                 "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872",
@@ -46,14 +30,6 @@
             ],
             "markers": "python_version >= '3'",
             "version": "==2.0.12"
-        },
-        "dynamodb-json": {
-            "hashes": [
-                "sha256:236672bc144f68de6477b748ab61b8187a7d64c400d7c0f400498a930e19b8b3",
-                "sha256:3d1dbfde4cb22e993fd5d78e7a16fd70480ad9d567f4f95f67a860005b0430d2"
-            ],
-            "index": "pypi",
-            "version": "==1.3"
         },
         "ibm-cloud-sdk-core": {
             "hashes": [
@@ -75,14 +51,6 @@
             ],
             "markers": "python_version >= '3'",
             "version": "==3.3"
-        },
-        "jmespath": {
-            "hashes": [
-                "sha256:a490e280edd1f57d6de88636992d05b71e97d69a26a19f058ecf7d304474bf5e",
-                "sha256:e8dcd576ed616f14ec02eed0005c85973b5890083313860136657e24784e4c04"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==1.0.0"
         },
         "mail-parser": {
             "hashes": [
@@ -115,14 +83,6 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==2.27.1"
-        },
-        "s3transfer": {
-            "hashes": [
-                "sha256:7a6f4c4d1fdb9a2b640244008e142cbc2cd3ae34b386584ef044dd0f27101971",
-                "sha256:95c58c194ce657a5f4fb0b9e60a84968c808888aed628cd98ab8771fe1db98ed"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==0.5.2"
         },
         "simplejson": {
             "hashes": [
