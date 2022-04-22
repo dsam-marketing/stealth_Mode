@@ -12,7 +12,12 @@
       "console": "integratedTerminal",
       "justMyCode": false,
       "env": {
-        "AWS_PROFILE": "stealth"
+        "AWS_PROFILE": "stealth",
+        "STAGE": "dev",
+        "RECIPIENT": "sam@networkerspace.com",
+        "SENDER": "harleyguru@outlook.com",
+        "BUCKET": "stealth-dev-stealthbucket-1kqmuq2sb2rib",
+        "ATTACHMENT_BUCKET": "stealth-attachments"
       }
     }
   ]

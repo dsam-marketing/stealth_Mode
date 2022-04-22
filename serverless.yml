@@ -45,6 +45,7 @@ functions:
     package: {}
     # timeout: 10
     environment:
+      SENDER: ${ssm:SENDER}
       BUCKET:
         Ref: StealthBucket
       ATTACHMENT_BUCKET:
